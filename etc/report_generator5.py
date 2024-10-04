@@ -276,46 +276,40 @@ def get_wall_of_shame():
     }
 
 def get_database_info():
-    # Get the database information
+    print("Entering get_database_info()")
+    # Initialize variables with default values
+    bbsdb = "N/A"
+    bbsdm = "N/A"
+    lemon_score = "N/A"
+    dopewar_score = "N/A"
+    blackjack_score = "N/A"
+    videopoker_score = "N/A"
+    mmind_score = "N/A"
+    golfsim_score = "N/A"
 
-    # collect high scores from the database
-    try:
-        with open('../lemonade_hs.pkl', 'rb') as f:
-            lemon_score = pickle.load(f)
-        f.close()
+    # Function to safely load pickle files, had errors when pickle files are not there or not populated.
+    def safe_load_pickle(filename):
+        try:
+            print(f"Attempting to load {filename}")
+            with open(filename, 'rb') as f:
+                data = pickle.load(f)
+            print(f"Successfully loaded {filename}")
+            return data
+        except Exception as e:
+            print(f"Error loading {filename}: {str(e)}")
+            return "N/A"
 
-        with open('../dopewar_hs.pkl', 'rb') as f:
-            dopewar_score = pickle.load(f)
-        f.close()
+    # Load each file
+    bbsdb = safe_load_pickle('../bbsdb.pkl')
+    bbsdm = safe_load_pickle('../bbsdm.pkl')
+    lemon_score = safe_load_pickle('../lemonade_hs.pkl')
+    dopewar_score = safe_load_pickle('../dopewar_hs.pkl')
+    blackjack_score = safe_load_pickle('../blackjack_hs.pkl')
+    videopoker_score = safe_load_pickle('../videopoker_hs.pkl')
+    mmind_score = safe_load_pickle('../mmind_hs.pkl')
+    golfsim_score = safe_load_pickle('../golfsim_hs.pkl')
 
-        with open('../blackjack_hs.pkl', 'rb') as f:
-            blackjack_score = pickle.load(f)
-        f.close()
-
-        with open('../videopoker_hs.pkl', 'rb') as f:
-            videopoker_score = pickle.load(f)
-        f.close()
-
-        with open('../mmind_hs.pkl', 'rb') as f:
-            mmind_score = pickle.load(f)
-        f.close()
-
-        with open('../golfsim_hs.pkl', 'rb') as f:
-            golfsim_score = pickle.load(f)
-        f.close()
-
-        with open('../bbsdb.pkl', 'rb') as f:
-            bbsdb = pickle.load(f)
-        f.close()
-
-        with open('../bbsdm.pkl', 'rb') as f:
-            bbsdm = pickle.load(f)
-        f.close()
-
-    except Exception as e:
-        print(f"Error with database: {str(e)}")
-        pass
-
+    print("Preparing to return data from get_database_info()")
     return {
         'database': "N/A",
         "bbsdb": bbsdb,
@@ -327,7 +321,7 @@ def get_database_info():
         'mmind_score': mmind_score,
         'golfsim_score': golfsim_score
     }
-
+	
 def generate_main_html(log_data, system_info):
     html_template = """
 <!DOCTYPE html>
